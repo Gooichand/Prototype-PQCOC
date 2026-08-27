@@ -94,3 +94,4 @@
 - [x] Refresh README.md, ARCHITECTURE.md, and EXPERIMENTS.md, and reconcile DOCS.md, CHECKLIST.md, DELIVERY.md, and final validation claims with the finalized code and results.
 - [x] Inspect and refine README.md against the finalized source, package scripts, benchmark artifacts, release tags, and research limitations.
 - [x] Produce a citation-grounded research paper around PQ-ForensicVault with R1–R10 mapping, architecture, implementation, evaluation, discussion, conclusion, visuals, and reproducibility appendix.
+- [x] Remove PAPER.md, the generated Word paper, the paper DOCX generator, paper-only release references, and the paper release tag from GitHub while preserving the prototype documentation and benchmark artifacts.

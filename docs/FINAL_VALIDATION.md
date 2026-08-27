@@ -1,6 +1,6 @@
 # PQ-ForensicVault Final Prototype Validation
 
-**Validation purpose:** Freeze the implementation state that the research paper will describe as a proof-of-concept study of classical ECDSA-P256 and post-quantum ML-DSA-65 signatures for synthetic digital-evidence chain-of-custody records.
+**Validation purpose:** Freeze the implementation state of the PQ-ForensicVault proof-of-concept study of classical ECDSA-P256 and post-quantum ML-DSA-65 signatures for synthetic digital-evidence chain-of-custody records.
 
 **Validated repository revision:** `9877bb0` (`v2.2.0-final-prototype`)
 
@@ -51,7 +51,7 @@ The benchmark runner was executed with five configurations: 10, 25, 50, 100, and
 
 The generated benchmark artifacts are `benchmark-results.json`, `benchmark-results.csv`, `BENCHMARK_RESULTS.md`, and `benchmark-comparison.png`. The plot is regenerated with `pnpm benchmark:plot` from the JSON measurements. The full benchmark is regenerated with `pnpm benchmark`.
 
-ML-DSA-65 measurements were executed through `@noble/post-quantum@0.7.0`, identified in the generated report as FIPS 204 ML-DSA-65. The results are runtime observations, not universal performance claims. The paper should report the machine, operating system, Node.js version, package version, payload design, repetitions, and limitations alongside the results.
+ML-DSA-65 measurements were executed through `@noble/post-quantum@0.7.0`, identified in the generated report as FIPS 204 ML-DSA-65. The results are runtime observations, not universal performance claims. Any external report using these results should state the machine, operating system, Node.js version, package version, payload design, repetitions, and limitations alongside the results.
 
 ## 4. Reproducibility commands
 
