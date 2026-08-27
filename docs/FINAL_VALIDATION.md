@@ -2,7 +2,7 @@
 
 **Validation purpose:** Freeze the implementation state that the research paper will describe as a proof-of-concept study of classical ECDSA-P256 and post-quantum ML-DSA-65 signatures for synthetic digital-evidence chain-of-custody records.
 
-**Validated repository revision:** `c928af5` (`v2.1.0` before final hardening edits)
+**Validated repository revision:** `9877bb0` (`v2.2.0-final-prototype`)
 
 **Validation runtime:** Node.js `v22.13.0`, Linux `x64`, pnpm `10.4.1`
 
@@ -65,7 +65,7 @@ pnpm benchmark:plot
 pnpm dev
 ```
 
-The final release should be created only after the commands above complete successfully and the browser acceptance walkthrough confirms acquisition, hashing, signing, logging, verification, tamper-copy failure, reset, and report export.
+The release was created after the commands above completed successfully and the browser acceptance walkthrough confirms acquisition, hashing, signing, logging, verification, tamper-copy failure, reset, and report export.
 
 ## 5. Research limitations
 
