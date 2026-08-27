@@ -41,12 +41,11 @@ describe("PQ-ForensicVault integrity primitives", () => {
     const firstHash = sha3_256(firstPayload);
     const secondPayload = stableJson({ sequence: 2, action: "transfer", actor: custodian, previousEventHash: firstHash });
     const records = [
-      { actorId: analyst, sequenceNumber: 1, canonicalPayload: firstPayload, eventRecordHash: firstHash, previousEventHash: null, signatureValue: signEcdsa(analyst, firstPayload) },
-      { actorId: custodian, sequenceNumber: 2, canonicalPayload: secondPayload, eventRecordHash: sha3_256(secondPayload), previousEventHash: firstHash, signatureValue: signEcdsa(custodian, secondPayload) },
+      { actorId: analyst, sequenceNumber: 1, canonicalPayload: firstPayload, eventRecordHash: firstHash, previousEventHash: null, signatureValue: signEcdsa(analyst, firstPayload), signerPublicKeyPem: analystKey.publicKeyPem },
+      { actorId: custodian, sequenceNumber: 2, canonicalPayload: secondPayload, eventRecordHash: sha3_256(secondPayload), previousEventHash: firstHash, signatureValue: signEcdsa(custodian, secondPayload), signerPublicKeyPem: custodianKey.publicKeyPem },
     ];
-    const publicKeys = { [analyst]: analystKey.publicKeyPem, [custodian]: custodianKey.publicKeyPem };
-    expect(validateCustodyChain(records, publicKeys).passed).toBe(true);
-    expect(validateCustodyChain([{ ...records[0] }, { ...records[1], canonicalPayload: `${records[1].canonicalPayload} demo-copy-tamper` }], publicKeys).passed).toBe(false);
+    expect(validateCustodyChain(records).passed).toBe(true);
+    expect(validateCustodyChain([{ ...records[0] }, { ...records[1], canonicalPayload: `${records[1].canonicalPayload} demo-copy-tamper` }]).passed).toBe(false);
   });
 
   it("does not preserve private material through a demo reset but can create a new valid key for further training actions", () => {

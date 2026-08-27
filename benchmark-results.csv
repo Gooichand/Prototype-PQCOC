@@ -1,0 +1,6 @@
+record_count,repetitions,samples,ecdsa_sign_avg_ms,ecdsa_sign_median_ms,ecdsa_verify_avg_ms,ecdsa_sig_bytes,mldsa_sign_avg_ms,mldsa_sign_median_ms,mldsa_verify_avg_ms,mldsa_sig_bytes,mldsa_tamper_rejections
+10,3,30,0.1632,0.099,0.1831,71.1,15.3202,11.0032,4.5738,3309,100.0% (30/30 ML-DSA rejects modified canonical payloads)
+25,3,75,0.101,0.0936,0.1777,70.9,14.0844,12.6193,3.7182,3309,100.0% (75/75 ML-DSA rejects modified canonical payloads)
+50,3,150,0.0966,0.0905,0.2022,71,19.0515,15.7013,4.5263,3309,100.0% (150/150 ML-DSA rejects modified canonical payloads)
+100,3,300,0.0954,0.0904,0.1887,71,17.8804,13.6208,4.1149,3309,100.0% (300/300 ML-DSA rejects modified canonical payloads)
+200,2,400,0.0747,0.0619,0.149,71.1,15.38,12.1083,3.6391,3309,100.0% (400/400 ML-DSA rejects modified canonical payloads)

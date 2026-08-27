@@ -16,7 +16,7 @@ type AuditExportInput = {
   evidence: { originalName: string; sha256: string; sha3_256: string; manifest: unknown };
   custodyEvents: ExportCustodyEvent[];
   latestVerification: { overallStatus: string; findings: unknown } | null;
-  algorithms: { artifactHashes: string[]; custodySignature: string; pqCapability: { algorithm: string; status: string; detail: string }; mldsaDisclosure?: string };
+  algorithms: { artifactHashes: string[]; custodySignature: string; pqCapability: { algorithm: string; status: string; detail: string; executionAvailable?: boolean; adapterStatus?: unknown }; mldsaDisclosure?: string };
   benchmark: { createdAt: number; results: {
     ecdsa?: {
       signingMsAverage: number; signingMsMedian?: number; signingMsStddev?: number;
@@ -25,7 +25,15 @@ type AuditExportInput = {
       publicKeySizeBytes?: number; privateKeySizeBytes?: number; storageOverheadBytes?: number;
       tamperDetectionRate?: string; nodeVersion?: string; os?: string;
     };
-    mldsa?: string; metadata?: { nodeVersion: string; os: string; algorithm: string }
+    mldsa?: string | {
+      signingMsAverage: number; signingMsMedian?: number; signingMsStddev?: number;
+      verificationMsAverage: number; verificationMsMedian?: number; verificationMsStddev?: number;
+      signatureBytesAverage: number; samples: number; recordCount?: number; repetitions?: number;
+      publicKeySizeBytes?: number; secretKeySizeBytes?: number; signatureSizeBytes?: number;
+      storageOverheadBytes?: number; tamperDetectionRate?: string; nodeVersion?: string; os?: string;
+      packageVersion?: string; audit?: string;
+    };
+    metadata?: { nodeVersion: string; os: string; algorithm: string; executionAvailable?: boolean }
   } } | null;
   legalAdmissibilityCaution: string;
   reportChecksum?: string;
@@ -62,7 +70,12 @@ export function buildCustodyCsv(report: AuditExportInput): string {
       ["benchmark_tamper_detection_rate", report.benchmark.results?.ecdsa?.tamperDetectionRate ?? "N/A"],
       ["benchmark_node_version", report.benchmark.results?.ecdsa?.nodeVersion ?? report.benchmark.results?.metadata?.nodeVersion ?? "N/A"],
       ["benchmark_os", report.benchmark.results?.ecdsa?.os ?? report.benchmark.results?.metadata?.os ?? "N/A"],
-      ["benchmark_mldsa", typeof report.benchmark.results?.mldsa === "string" ? report.benchmark.results.mldsa : "not executed"],
+      ["benchmark_mldsa", (() => {
+        const m = report.benchmark.results?.mldsa;
+        if (typeof m === "object" && m !== null && "signingMsAverage" in m) return `ML-DSA-65 real: sign=${(m as any).signingMsAverage}ms verify=${(m as any).verificationMsAverage}ms sig=${(m as any).signatureBytesAverage}B`;
+        return typeof m === "string" ? m : "not executed";
+      })()],
+      ["benchmark_mldsa_execution", String(report.benchmark.results?.metadata?.executionAvailable ?? false)],
     ] : [["benchmark", "No benchmark recorded"]]),
     [],
     ["sequence", "event_id", "action", "actor", "location", "timestamp_utc_ms", "previous_event_hash", "record_hash", "signature_algorithm"],
@@ -109,26 +122,68 @@ export function buildAuditMarkdown(report: AuditExportInput): string {
     ? report.custodyEvents.map((event) => `| ${event.sequenceNumber} | ${event.action} | ${event.actorId} | ${event.location} | ${event.happenedAt} | \`${event.eventRecordHash}\` |`).join("\n")
     : "| — | No custody events recorded | — | — | — | — |";
   const benchmarkSection = report.benchmark
-    ? `## Benchmark results
-
-- **Algorithm:** ${report.benchmark.results?.ecdsa?.signingMsAverage !== undefined ? "ECDSA-P256" : "N/A"}
-- **Record count:** ${report.benchmark.results?.ecdsa?.recordCount ?? "N/A"}
-- **Repetitions:** ${report.benchmark.results?.ecdsa?.repetitions ?? "N/A"}
-- **Total samples:** ${report.benchmark.results?.ecdsa?.samples ?? 0}
-- **Signing average:** ${report.benchmark.results?.ecdsa?.signingMsAverage ?? "N/A"} ms
-- **Signing median:** ${report.benchmark.results?.ecdsa?.signingMsMedian ?? "N/A"} ms
-- **Signing stddev:** ${report.benchmark.results?.ecdsa?.signingMsStddev ?? "N/A"} ms
-- **Verification average:** ${report.benchmark.results?.ecdsa?.verificationMsAverage ?? "N/A"} ms
-- **Verification median:** ${report.benchmark.results?.ecdsa?.verificationMsMedian ?? "N/A"} ms
-- **Verification stddev:** ${report.benchmark.results?.ecdsa?.verificationMsStddev ?? "N/A"} ms
-- **Signature size:** ${report.benchmark.results?.ecdsa?.signatureBytesAverage ?? "N/A"} bytes
-- **Public key size:** ${report.benchmark.results?.ecdsa?.publicKeySizeBytes ?? "N/A"} bytes
-- **Tamper detection rate:** ${report.benchmark.results?.ecdsa?.tamperDetectionRate ?? "N/A"}
-- **Node version:** ${report.benchmark.results?.ecdsa?.nodeVersion ?? report.benchmark.results?.metadata?.nodeVersion ?? "N/A"}
-- **OS:** ${report.benchmark.results?.ecdsa?.os ?? report.benchmark.results?.metadata?.os ?? "N/A"}
-- **ML-DSA:** ${typeof report.benchmark.results?.mldsa === "string" ? report.benchmark.results.mldsa : "Not executed"}
-
-`
+    ? (() => {
+      const ecdsa = report.benchmark.results?.ecdsa;
+      const mldsa = report.benchmark.results?.mldsa;
+      const executionAvailable = report.benchmark.results?.metadata?.executionAvailable ?? false;
+      const lines = [
+        "## Benchmark results",
+        "",
+        "### ECDSA-P256",
+        "",
+        `- **Algorithm:** ${ecdsa?.signingMsAverage !== undefined ? "ECDSA-P256" : "N/A"}`,
+        `- **Record count:** ${ecdsa?.recordCount ?? "N/A"}`,
+        `- **Repetitions:** ${ecdsa?.repetitions ?? "N/A"}`,
+        `- **Total samples:** ${ecdsa?.samples ?? 0}`,
+        `- **Signing average:** ${ecdsa?.signingMsAverage ?? "N/A"} ms`,
+        `- **Signing median:** ${ecdsa?.signingMsMedian ?? "N/A"} ms`,
+        `- **Signing stddev:** ${ecdsa?.signingMsStddev ?? "N/A"} ms`,
+        `- **Verification average:** ${ecdsa?.verificationMsAverage ?? "N/A"} ms`,
+        `- **Verification median:** ${ecdsa?.verificationMsMedian ?? "N/A"} ms`,
+        `- **Verification stddev:** ${ecdsa?.verificationMsStddev ?? "N/A"} ms`,
+        `- **Signature size:** ${ecdsa?.signatureBytesAverage ?? "N/A"} bytes`,
+        `- **Public key size:** ${ecdsa?.publicKeySizeBytes ?? "N/A"} bytes`,
+        `- **Tamper detection rate:** ${ecdsa?.tamperDetectionRate ?? "N/A"}`,
+      ];
+      if (typeof mldsa === "object" && mldsa !== null && "signingMsAverage" in mldsa) {
+        lines.push(
+          "",
+          "### ML-DSA-65 (real execution)",
+          "",
+          `- **Algorithm:** ML-DSA-65`,
+          `- **Record count:** ${mldsa.recordCount ?? "N/A"}`,
+          `- **Repetitions:** ${mldsa.repetitions ?? "N/A"}`,
+          `- **Total samples:** ${mldsa.samples ?? 0}`,
+          `- **Signing average:** ${mldsa.signingMsAverage} ms`,
+          `- **Signing median:** ${mldsa.signingMsMedian ?? "N/A"} ms`,
+          `- **Signing stddev:** ${mldsa.signingMsStddev ?? "N/A"} ms`,
+          `- **Verification average:** ${mldsa.verificationMsAverage} ms`,
+          `- **Verification median:** ${mldsa.verificationMsMedian ?? "N/A"} ms`,
+          `- **Verification stddev:** ${mldsa.verificationMsStddev ?? "N/A"} ms`,
+          `- **Signature size:** ${mldsa.signatureBytesAverage} bytes`,
+          `- **Public key size:** ${mldsa.publicKeySizeBytes} bytes`,
+          `- **Tamper detection rate:** ${mldsa.tamperDetectionRate}`,
+          `- **Package:** ${mldsa.packageVersion ?? "N/A"}`,
+          `- **Audit:** ${mldsa.audit ?? "N/A"}`,
+        );
+      } else {
+        lines.push(
+          "",
+          "### ML-DSA-65",
+          "",
+          `- **Status:** ${typeof mldsa === "string" ? mldsa : "Not executed"}`,
+        );
+      }
+      lines.push(
+        "",
+        "### Runtime",
+        "",
+        `- **Node version:** ${ecdsa?.nodeVersion ?? report.benchmark.results?.metadata?.nodeVersion ?? "N/A"}`,
+        `- **OS:** ${ecdsa?.os ?? report.benchmark.results?.metadata?.os ?? "N/A"}`,
+        `- **ML-DSA execution:** ${executionAvailable ? "Active (real ML-DSA-65 operations)" : "Not executed"}`,
+      );
+      return lines.join("\n");
+    })()
     : "";
   return `# PQ-ForensicVault Audit Report
 

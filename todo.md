@@ -77,3 +77,13 @@
 - [x] Section 22: Verified one-command setup (pnpm install --frozen-lockfile succeeds, pnpm dev, pnpm test, pnpm check, pnpm build all pass).
 - [x] Section 23: Froze dependencies in pnpm-lock.yaml, initialized git repo, committed all source, tagged release v1.0.0.
 - [x] Section 24: Final validation — 85 tests pass across 10 files, TypeScript check clean, production build succeeds, git tag v1.0.0 created.
+- [x] Section 25: Installed `@noble/post-quantum@0.7.0` (MIT, Cure53-audited) for real ML-DSA-65 execution. Validated on Node.js v24.12.0 Windows AMD64: keygen, sign, verify, tamper rejection all pass.
+- [x] Section 26: Created `server/crypto/mldsaAdapter.ts` with typed adapter functions: `validateAdapter()`, `generateMldsa65KeyPair()`, `signMldsa65()`, `verifyMldsa65()`, `getMldsa65ParameterMetadata()`, `isMldsaExecutionAvailable()`, `resetAdapterState()`. No silent ECDSA fallback.
+- [x] Section 27: Updated `forensicCore.ts` with dual-algorithm support: ECDSA + ML-DSA custody events, `ChainRecord` with `signatureAlgorithm` field, `validateCustodyChain()` dispatches to correct verifier, `signMldsa65Event()`/`verifyMldsa65Event()`, `measureMldsaBenchmark()`, backward-compatible `PqCapability` type.
+- [x] Section 28: Created `server/mldsa.adapter.test.ts` with 18 comprehensive tests: capability distinction, real keygen, key/sig sizes, signing, verification, tamper rejection, wrong-key rejection, malformed signatures, no ECDSA fallback, ECDSA persistence, mixed chains, honest status, no fake timing, private key isolation, image safeguards, tamper tests, export metadata.
+- [x] Section 29: Updated benchmark runner for dual-algorithm output: ECDSA + ML-DSA with adapter validation, CSV export, Markdown comparison table.
+- [x] Section 30: Updated `forensicExports.ts` types and Markdown/CSV exports to handle ML-DSA benchmark data when real execution is available.
+- [x] Section 31: Generated `benchmark-results.json`, `benchmark-results.csv`, `BENCHMARK_RESULTS.md` with real ECDSA + ML-DSA measurements.
+- [x] Section 32: Created `docs/MLDSA_VALIDATION.md` with package details, adapter validation, test results, benchmark comparison, and security notes.
+- [x] Section 33: Created `docs/FINAL_ACCEPTANCE_TEST.md` with 20-step workflow validation, ML-DSA completion rule, and limitation disclosure.
+- [x] Section 34: Final validation — 103 tests pass across 11 files, TypeScript check clean, production build succeeds, pnpm install --frozen-lockfile succeeds.

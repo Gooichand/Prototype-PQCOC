@@ -6,6 +6,7 @@ import {
   createEcdsaIdentity,
   getPqCapability,
   measureEcdsaBenchmark,
+  measureMldsaBenchmark,
   MLDSA_DISCLOSURE_TEXT,
   resetEphemeralKeys,
   sha3_256,
@@ -335,10 +336,11 @@ export const forensicRouter = router({
     await seedDemoData();
     const pqCapability = getPqCapability();
     const ecdsaResult = measureEcdsaBenchmark(input.recordCount, input.repetitions);
+    const mldsaResult = measureMldsaBenchmark(input.recordCount, input.repetitions);
     const results = {
       ecdsa: ecdsaResult,
-      mldsa: MLDSA_DISCLOSURE_TEXT,
-      metadata: { nodeVersion: ecdsaResult.nodeVersion, os: ecdsaResult.os, algorithm: "ECDSA-P256", pqAlgorithm: "ML-DSA-65 (FIPS 204)", pqStatus: pqCapability.status },
+      mldsa: mldsaResult ?? MLDSA_DISCLOSURE_TEXT,
+      metadata: { nodeVersion: ecdsaResult.nodeVersion, os: ecdsaResult.os, algorithm: "ECDSA-P256", pqAlgorithm: "ML-DSA-65 (FIPS 204)", pqStatus: pqCapability.status, executionAvailable: pqCapability.executionAvailable },
       limitations: "Results are lab measurements in this server runtime; they are not production capacity or admissibility claims. This experiment measures signing and verification trade-offs; it does not prove one algorithm universally superior.",
     };
     const run = { id: makeId("bench"), createdBy: demoOwner, recordCount: input.recordCount, repetitions: input.repetitions, pqModeStatus: pqCapability.status, resultsJson: JSON.stringify(results), createdAt: now() };

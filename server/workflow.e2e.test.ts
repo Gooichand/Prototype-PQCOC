@@ -41,6 +41,8 @@ function makeChainRecord(
     eventRecordHash,
     previousEventHash,
     signatureValue,
+    signatureAlgorithm: "ECDSA-P256 / SHA-256",
+    signerPublicKeyPem: key.publicKeyPem,
     ...overrides,
   };
 }
@@ -101,10 +103,6 @@ describe("Full end-to-end workflow: acquisition → hashing → signing → logg
     expect(event1.eventRecordHash).not.toBe(event2.eventRecordHash);
 
     const chainRecords: ChainRecord[] = [event1, event2];
-    const publicKeys: Record<string, string> = {
-      [ANALYST_ID]: analystKey.publicKeyPem,
-      [CUSTODIAN_ID]: custodianKey.publicKeyPem,
-    };
 
     // ── Step 5: Verification ────────────────────────────────────────
     // Artifact integrity check
@@ -119,7 +117,7 @@ describe("Full end-to-end workflow: acquisition → hashing → signing → logg
     expect(tamperedIntegrity.sha3_256Match).toBe(false);
 
     // Chain of custody verification
-    const chainResult = validateCustodyChain(chainRecords, publicKeys);
+    const chainResult = validateCustodyChain(chainRecords);
     expect(chainResult.passed).toBe(true);
     expect(chainResult.findings).toHaveLength(2);
     for (const finding of chainResult.findings) {
@@ -128,11 +126,11 @@ describe("Full end-to-end workflow: acquisition → hashing → signing → logg
       expect(finding.signatureValid).toBe(true);
     }
 
-    // Broken chain fails
-    const brokenChain = validateCustodyChain(
-      [event1, event2],
-      { [ANALYST_ID]: analystKey.publicKeyPem }, // Missing custodian key
-    );
+    // Broken chain fails (wrong public key)
+    const brokenChain = validateCustodyChain([
+      event1,
+      { ...event2, signerPublicKeyPem: analystKey.publicKeyPem },
+    ]);
     expect(brokenChain.passed).toBe(false);
     expect(brokenChain.findings[1].signatureValid).toBe(false);
 
