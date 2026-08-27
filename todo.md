@@ -87,3 +87,6 @@
 - [x] Section 32: Created `docs/MLDSA_VALIDATION.md` with package details, adapter validation, test results, benchmark comparison, and security notes.
 - [x] Section 33: Created `docs/FINAL_ACCEPTANCE_TEST.md` with 20-step workflow validation, ML-DSA completion rule, and limitation disclosure.
 - [x] Section 34: Final validation — 103 tests pass across 11 files, TypeScript check clean, production build succeeds, pnpm install --frozen-lockfile succeeds.
+- [x] Section 35: Removed analytics script from index.html — eliminated 3 build warnings (unresolved %VITE_ANALYTICS_ENDPOINT% placeholders + script-type).
+- [x] Section 36: Code-split secondary panels via React.lazy/Suspense — extracted BenchmarkPanel, ReportsPanel, StandardsPanel, AcceptancePanel into separate chunks. Added vendor chunk splitting (vendor-react, vendor-tRPC, vendor-radix, vendor-lucide, vendor-misc). Main chunk reduced from 748KB to 453KB (below 500KB threshold). Zero build warnings.
+- [x] Section 37: Added 8 regression tests in Home.regression.test.tsx covering: analytics removal (no VITE_ placeholders, no analytics scripts), bundle splitting (overview renders, all nav items present, all panels navigate without errors), core functionality preserved (PQ status, evidence vault, ML-DSA disclosure). All 111 tests pass across 12 files.
