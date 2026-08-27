@@ -1,101 +1,143 @@
 # PQ-ForensicVault
 
-PQ-ForensicVault is a presentation-ready research prototype for studying a post-quantum-aware chain of custody for synthetic digital evidence and permitted, non-sensitive copies. The implementation compares a classical ECDSA-P256 signing baseline with genuine ML-DSA-65 execution when the validated adapter is available. It is designed for academic demonstration and reproducible experimentation rather than operational forensic deployment.
+> **Post-Quantum Chain of Custody for Digital Evidence**
 
-> This is a technical proof of concept. It does not establish legal admissibility, replace validated acquisition procedures, provide forensic certification, or claim that a real quantum computer has broken current public-key cryptography.
+PQ-ForensicVault is a local-first web prototype for evaluating how classical ECDSA-P256 and post-quantum ML-DSA-65 signatures affect the integrity, verification, storage, and performance of synthetic digital-evidence chain-of-custody records.
 
-## Research purpose
+The project is designed for **academic research, classroom demonstration, and reproducible proof-of-concept evaluation**. It is not a certified forensic platform, a replacement for validated acquisition software, or a legal-admissibility system.
 
-The prototype addresses the research question: **what integrity, storage, and performance trade-offs arise when ML-DSA-65 is compared with ECDSA-P256 for signed digital-evidence chain-of-custody records?** It separates five controls that should not be conflated: hashes detect byte changes; digital signatures associate canonical records with a signing key; a hash-linked custody ledger preserves event order; encryption protects confidentiality; and post-quantum signatures reduce exposure to future quantum attacks against classical public-key signatures.
+> **Important boundary:** Use only generated data or authorised, non-sensitive copies. Do not upload seized devices, personal data, confidential material, or unauthorised forensic images.
 
-## Implemented scope
+## Research question
 
-| Area | Behaviour in the final prototype |
+The prototype investigates the following question:
+
+**What integrity, storage, and performance trade-offs arise when ML-DSA-65 is compared with ECDSA-P256 for signed digital-evidence chain-of-custody records?**
+
+The conclusion is intentionally a trade-off analysis. Hashing detects changes, signatures associate canonical records with a signing key, a hash-linked ledger preserves custody-event continuity, encryption protects confidentiality, and post-quantum signatures address future quantum threats to classical public-key signatures. No single mechanism establishes legal admissibility.
+
+## What is included
+
+| Capability | Implementation status |
 |---|---|
-| Evidence | Synthetic artifact generation and permitted TXT, PDF, JPEG, PNG, WebP, and GIF copies below 2 MB |
-| Integrity | Server-side SHA-256 and SHA3-256 digests and canonical manifests |
-| Classical signature | Real ECDSA-P256 signing and verification for custody events |
-| Post-quantum signature | Real ML-DSA-65 adapter path using `@noble/post-quantum@0.7.0`; no silent ECDSA fallback |
-| Custody | Actor, action, UTC timestamp, location, reason, transfer status, prior-event hash, event hash, signature, and public-key metadata |
-| Verification | Artifact hashes, event-record hashes, linked continuity, and signatures are checked independently |
-| Tamper demonstration | Artifact-copy and ledger-copy scenarios; original evidence and persisted ledger are protected |
-| Reports | Markdown audit report, JSON export, CSV custody export, report checksum, algorithm disclosure, and limitations |
-| UI | React/Vite workspace with Evidence Vault, Timeline, Verification Center, Tamper Laboratory, Benchmark Observatory, Reports, Standards, and Acceptance panels |
+| Synthetic evidence acquisition | Generated training artifact plus permitted TXT, PDF, JPEG, PNG, WebP, and GIF copies below 2 MB |
+| Integrity hashing | Server-side SHA-256 and SHA3-256 digests with canonical manifest metadata |
+| Classical signing | Real server-side ECDSA-P256 signing and verification |
+| Post-quantum signing | Real ML-DSA-65 adapter through `@noble/post-quantum@0.7.0`; no silent ECDSA fallback |
+| Custody history | Signed, hash-linked events with actor, action, timestamp, location, reason, status, event hash, signature, and public-key metadata |
+| Verification | Independent artifact digest, event hash, signature, and continuity checks |
+| Tamper laboratory | Safe artifact-copy and ledger-copy demonstrations that preserve the original evidence and persisted ledger |
+| Reports | Markdown audit report plus JSON and CSV exports with verification findings, algorithm disclosure, checksums, and limitations |
+| Benchmarking | ECDSA-P256 versus ML-DSA-65 timing, signature-size, metadata, and tamper-rejection measurements |
+| Interface | Crimson-and-white blueprint workspace with Evidence Vault, Timeline, Verification, Tamper, Benchmark, Reports, Standards, and Acceptance panels |
+
+## System workflow
+
+```text
+Acquire synthetic/permitted artifact
+        ↓
+Calculate SHA-256 and SHA3-256 digests
+        ↓
+Create canonical evidence manifest
+        ↓
+Sign acquisition custody event
+        ↓
+Append hash-linked custody and handover events
+        ↓
+Recalculate hashes and verify signatures/continuity
+        ↓
+Demonstrate controlled-copy tampering and reset
+        ↓
+Export Markdown, JSON, and CSV audit materials
+```
+
+ECDSA-P256 is the active signing algorithm for ordinary custody events. ML-DSA-65 is executed and benchmarked only when the validated server-side adapter is available. Capability detection is never presented as a substitute for actual ML-DSA execution.
 
 ## Requirements
 
-Use **Node.js 22 or newer** and pnpm. The repository includes a frozen `pnpm-lock.yaml`. The managed local preview supplies its own database, object-storage, and authentication configuration. A genuinely self-hosted installation must provide compatible configuration and must not commit secrets or evidence bytes.
+Install **Node.js 22 or newer**, **pnpm 10 or newer**, and Python 3 with Matplotlib if you want to regenerate the benchmark plot. The repository contains a frozen `pnpm-lock.yaml` and a headless plotting script that does not require a graphical desktop environment.
 
-## Install and run
+## Quick start
 
-Clone the final repository and check out the release tag:
+Clone the documentation-inclusive reproducibility release:
 
 ```bash
 git clone https://github.com/Gooichand/Prototype-PQCOC.git
 cd Prototype-PQCOC
-git checkout v2.2.1-reproducibility-docs
+git checkout v2.2.2-readme-final
 pnpm install --frozen-lockfile
-```
-
-Start the local application:
-
-```bash
 pnpm dev
 ```
 
-Open `http://localhost:3000/`. For a production build, run `pnpm build`; the compiled server is emitted under `dist/`.
+Open **http://localhost:3000/** in a browser. The managed preview supplies runtime database, storage, and authentication configuration. A standalone deployment must supply compatible services and secrets through its environment; never commit an `.env` file or credentials.
 
-## Validation commands
+## Validation and reproduction
 
-Run the same gates used for the final release:
+Run the complete quality gate from the repository root:
 
 ```bash
+pnpm install --frozen-lockfile
 pnpm test
 pnpm check
 pnpm build
 ```
 
-The final validation baseline is **111 passing tests across 12 test files**. The test suite includes cryptographic adapter checks, custody-chain continuity, verification success and failure paths, image safeguards, tamper reset, export structure, accessibility, reduced motion, lazy-loaded panel navigation, and an end-to-end synthetic workflow.
+The final validated baseline contains **111 passing tests across 12 test files**. Coverage includes cryptographic adapter validation, canonical payloads, custody continuity, verification success and failure, permitted-image safeguards, tamper reset, report exports, role guards, accessibility, reduced-motion behaviour, lazy-panel navigation, and the end-to-end synthetic workflow.
 
-## Reproduce the experiments
-
-The benchmark compares ECDSA-P256 and ML-DSA-65 using the same canonical record design and measurement procedure. It covers 10, 25, 50, 100, and 200 records with the configured repetition counts. Run:
+To regenerate the paper’s experimental outputs:
 
 ```bash
 pnpm benchmark
 pnpm benchmark:plot
 ```
 
-The commands regenerate `benchmark-results.json`, `benchmark-results.csv`, `BENCHMARK_RESULTS.md`, and `benchmark-comparison.png`. The report records the runtime, operating system, package version, timings, signature sizes, key metadata, storage overhead, and ML-DSA tamper-rejection measurements. Results are runtime observations and should not be presented as universal capacity claims.
+The benchmark command writes `benchmark-results.json`, `benchmark-results.csv`, and `BENCHMARK_RESULTS.md`. The plotting command reads the JSON results and writes `benchmark-comparison.png`. The benchmark uses 10, 25, 50, 100, and 200-record configurations with the repetition counts documented in [EXPERIMENTS.md](EXPERIMENTS.md).
 
-## Workflow demonstration
+## Demonstration sequence
 
-The recommended demonstration is to create a synthetic case, acquire or register a permitted self-created artifact, inspect both digests, append a signed handover, verify the clean record, run the two controlled tamper scenarios, reset the safe demo state, execute the benchmark, and export the audit materials. The Acceptance Test Center automates the synthetic version of this flow. It must not be used with seized, personal, confidential, or unauthorised evidence.
+For a class presentation, create a synthetic case, acquire a generated artifact or register a permitted self-created file, inspect both digests, append a custody handover, verify the clean evidence, run the two controlled tamper scenarios, reset the safe demo state, open the benchmark panel, and export the audit materials. The Acceptance Test Center automates a safe synthetic version of this sequence.
 
-## Architecture overview
+A successful clean verification should report **PASS**. A tampered artifact copy or ledger copy should report **FAIL**, while the original evidence remains unchanged. The demonstration must never be used as an operational evidence-handling procedure.
 
-The React client communicates with typed tRPC procedures exposed by the Node/Express server. The server delegates cryptographic work to `server/forensicCore.ts` and the ML-DSA adapter, persists metadata through the database layer, and stores artifact bytes through the storage adapter. See [ARCHITECTURE.md](ARCHITECTURE.md) for module responsibilities, data flow, threat model, and trust boundaries. See [EXPERIMENTS.md](EXPERIMENTS.md) for the complete measurement protocol.
-
-## Documentation map
+## Architecture and documentation
 
 | Document | Purpose |
 |---|---|
-| `ARCHITECTURE.md` | Modules, data flow, trust boundaries, threats, and security assumptions |
-| `EXPERIMENTS.md` | Dataset generation, benchmark parameters, commands, outputs, and interpretation |
-| `DOCS.md` | Documentation index and maintenance rules |
-| `CHECKLIST.md` | Final acceptance and release checklist |
-| `DELIVERY.md` | What is delivered, how to present it, and what is out of scope |
-| `docs/FINAL_VALIDATION.md` | Exact final validation record |
-| `docs/LOCAL_SETUP.md` | Local configuration and troubleshooting guidance |
-| `BENCHMARK_RESULTS.md` | Human-readable measured results |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Components, data flow, cryptographic roles, trust boundaries, threat model, and deployment assumptions |
+| [EXPERIMENTS.md](EXPERIMENTS.md) | Dataset policy, algorithms, parameters, commands, measured results, plotting, and interpretation |
+| [DOCS.md](DOCS.md) | Documentation index and maintenance rules |
+| [CHECKLIST.md](CHECKLIST.md) | Release, acceptance, and research-integrity checklist |
+| [DELIVERY.md](DELIVERY.md) | Delivered artifacts, presentation flow, and out-of-scope claims |
+| [docs/FINAL_VALIDATION.md](docs/FINAL_VALIDATION.md) | Exact validation evidence and environment record |
+| [docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md) | Local configuration, managed-preview assumptions, and troubleshooting |
+| [docs/MLDSA_VALIDATION.md](docs/MLDSA_VALIDATION.md) | ML-DSA adapter validation and security notes |
+| [docs/FINAL_ACCEPTANCE_TEST.md](docs/FINAL_ACCEPTANCE_TEST.md) | Detailed synthetic acceptance walkthrough |
 
-## Safety and legal boundaries
+## Project structure
 
-Use only generated data or authorised, non-sensitive copies. The prototype intentionally excludes unrestricted binary uploads and does not assert that a blockchain or append-only log alone makes evidence admissible. Production use would require validated acquisition, key custody, access control, encryption, retention, independent audit, institutional approval, legal review, and jurisdiction-specific compliance.
+```text
+client/src/pages/Home.tsx          Main forensic workspace
+client/src/panels/                 Lazy-loaded Benchmark, Reports, Standards, Acceptance panels
+server/forensicCore.ts             Canonicalization, hashes, signatures, verification, reports
+server/crypto/mldsaAdapter.ts      Real ML-DSA-65 adapter and validation
+server/routers/forensics.ts        Typed forensic tRPC procedures
+server/db.ts                       Metadata persistence abstraction
+server/storage.ts                  Artifact storage abstraction
+server/benchmark-runner.ts         Reproducible ECDSA/ML-DSA measurements
+scripts/plot_benchmarks.py         Headless benchmark visualisation
+benchmark-results.*                Machine-readable and tabular measurements
+benchmark-comparison.png           Generated comparison plot
+```
 
-## Release
+## Security and legal limitations
 
-The finalized research prototype is tagged `v2.2.1-reproducibility-docs` at commit `9fe1466` (code release at `9877bb0`). The release artifacts include source code, frozen dependencies, the benchmark outputs, the comparison plot, and the final validation record.
+The prototype demonstrates technical integrity controls, not a complete chain-of-custody operating environment. It does not provide hardware-backed key custody, production access governance, encryption policy, validated forensic acquisition, independent audit anchoring, retention management, malware analysis, or jurisdiction-specific legal compliance. A database or append-only log alone does not make evidence admissible.
+
+Production use would require institutional approval, validated acquisition procedures, secure key lifecycle management, authenticated access, encrypted storage and transport, retention controls, independent audit, incident response, and legal review. Benchmark values are observations from a specific runtime and must not be presented as universal performance guarantees.
+
+## Release information
+
+The documentation-inclusive release is **`v2.2.2-readme-final`**. The code and experiment baseline was previously validated at commit `9877bb0`; subsequent commits contain documentation and checklist alignment. Consult [docs/FINAL_VALIDATION.md](docs/FINAL_VALIDATION.md) for the exact test, build, benchmark, and environment record.
 
 ## References
 
@@ -103,4 +145,4 @@ The finalized research prototype is tagged `v2.2.1-reproducibility-docs` at comm
 [2]: https://csrc.nist.gov/pubs/fips/203/final "NIST FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism Standard"
 [3]: https://csrc.nist.gov/pubs/fips/205/final "NIST FIPS 205: Stateless Hash-Based Digital Signature Standard"
 
-NIST standards context: ML-DSA is specified in [FIPS 204][1]; ML-KEM and SLH-DSA are specified in [FIPS 203][2] and [FIPS 205][3].
+ML-DSA is specified by NIST FIPS 204 [1]. Related post-quantum standards include ML-KEM in FIPS 203 [2] and SLH-DSA in FIPS 205 [3].
