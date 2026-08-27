@@ -33,7 +33,7 @@ Clone the final repository and check out the release tag:
 ```bash
 git clone https://github.com/Gooichand/Prototype-PQCOC.git
 cd Prototype-PQCOC
-git checkout v2.2.0-final-prototype
+git checkout v2.2.1-reproducibility-docs
 pnpm install --frozen-lockfile
 ```
 
@@ -95,7 +95,7 @@ Use only generated data or authorised, non-sensitive copies. The prototype inten
 
 ## Release
 
-The finalized research prototype is tagged `v2.2.0-final-prototype` at commit `9877bb0`. The release artifacts include source code, frozen dependencies, the benchmark outputs, the comparison plot, and the final validation record.
+The finalized research prototype is tagged `v2.2.1-reproducibility-docs` at commit `9fe1466` (code release at `9877bb0`). The release artifacts include source code, frozen dependencies, the benchmark outputs, the comparison plot, and the final validation record.
 
 ## References
 

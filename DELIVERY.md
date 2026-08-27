@@ -2,7 +2,7 @@
 
 ## Delivered prototype
 
-The delivered repository is `Gooichand/Prototype-PQCOC`, release `v2.2.0-final-prototype`, commit `9877bb0`. It contains the React/Vite forensic workspace, Node/Express/tRPC server, database and storage adapters, ECDSA-P256 baseline, ML-DSA-65 adapter, verification and tamper workflows, benchmark runner, headless plotting script, automated tests, frozen dependencies, and research documentation.
+The delivered repository is `Gooichand/Prototype-PQCOC`, release `v2.2.1-reproducibility-docs`, commit `9fe1466` (code release at `9877bb0`). It contains the React/Vite forensic workspace, Node/Express/tRPC server, database and storage adapters, ECDSA-P256 baseline, ML-DSA-65 adapter, verification and tamper workflows, benchmark runner, headless plotting script, automated tests, frozen dependencies, and research documentation.
 
 ## Delivered research artifacts
 
@@ -30,7 +30,7 @@ A reviewer can reproduce the release with:
 ```bash
 git clone https://github.com/Gooichand/Prototype-PQCOC.git
 cd Prototype-PQCOC
-git checkout v2.2.0-final-prototype
+git checkout v2.2.1-reproducibility-docs
 pnpm install --frozen-lockfile
 pnpm test
 pnpm check

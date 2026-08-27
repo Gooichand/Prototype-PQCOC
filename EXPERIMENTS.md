@@ -42,7 +42,7 @@ From a clean checkout of the final tag:
 ```bash
 git clone https://github.com/Gooichand/Prototype-PQCOC.git
 cd Prototype-PQCOC
-git checkout v2.2.0-final-prototype
+git checkout v2.2.1-reproducibility-docs
 pnpm install --frozen-lockfile
 pnpm test
 pnpm check

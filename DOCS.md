@@ -26,4 +26,4 @@ Documentation must distinguish measured facts from design goals and must not cla
 
 ## Final release pointer
 
-The documented release is `v2.2.0-final-prototype` at commit `9877bb0` in [Gooichand/Prototype-PQCOC](https://github.com/Gooichand/Prototype-PQCOC). If source changes after this release, update the revision and validation date in every document that records exact release metadata.
+The documented release is `v2.2.1-reproducibility-docs` at commit `9fe1466` (code release at `9877bb0`) in [Gooichand/Prototype-PQCOC](https://github.com/Gooichand/Prototype-PQCOC). If source changes after this release, update the revision and validation date in every document that records exact release metadata.
