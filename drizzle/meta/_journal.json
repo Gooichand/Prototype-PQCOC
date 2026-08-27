@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1787819742641,
+      "tag": "0000_good_ghost_rider",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1787819972590,
+      "tag": "0001_complete_wong",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1787820102854,
+      "tag": "0002_sudden_sunspot",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1787820599146,
+      "tag": "0003_brief_firelord",
+      "breakpoints": true
+    }
+  ]
+}

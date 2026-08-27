@@ -1,0 +1,1 @@
+ALTER TABLE `custodyEvents` ADD `signerPublicKeyPem` text;

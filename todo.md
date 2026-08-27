@@ -1,0 +1,73 @@
+# Project TODO
+
+- [x] Define persistent entities for cases, investigators, evidence metadata, signatures, custody events, verification findings, benchmark runs, and audit exports.
+- [x] Add database schema and migration for forensic evidence and custody-history records using UTC timestamps.
+- [x] Implement S3-backed storage for permitted synthetic evidence artifacts while retaining immutable storage references in the database.
+- [x] Implement server-side SHA-256 and SHA-3 hashing for evidence acquisition and later integrity checks.
+- [x] Implement server-side ECDSA baseline signing and verification for canonical custody-event payloads.
+- [x] Implement server-side ML-DSA availability/status handling with no silent post-quantum simulation.
+- [x] Implement hash-linked append-only custody events that retain actor, action, timestamp, location, rationale, transfer status, previous-event hash, event-record hash, and signature details.
+- [x] Seed only clearly labelled synthetic demonstration cases, investigators, evidence metadata, and custody history.
+- [x] Build the responsive Premium Crimson & White hand-drawn blueprint interface with accessible status indicators and reduced-motion support.
+- [x] Implement case creation and synthetic-evidence acquisition workflows, including permitted local-file metadata capture and manifest creation.
+- [x] Implement investigator handovers with all required custody-event fields and signed continuity records.
+- [x] Build the Evidence Vault, interactive custody timeline, and independent Verification Center.
+- [x] Build the safe Tamper Laboratory restricted to seeded demo records or generated copies, with visible pass/fail findings and reset support.
+- [x] Build the Benchmark Observatory for repeatable ECDSA-versus-ML-DSA measurements and clear availability disclosure.
+- [x] Generate downloadable audit reports and structured JSON/CSV exports with algorithm details, limitations, and legal-admissibility caution.
+- [x] Add a final readiness checklist and free local-development setup documentation.
+- [x] Write and run Vitest coverage for major success, failure, tamper, and post-quantum-unavailable paths.
+- [x] Verify desktop and mobile layouts, functional workflows, browser console, and network behavior.
+- [x] Verify permitted-copy object-storage registration and manifest persistence end to end.
+- [x] Verify reduced-motion and keyboard-accessibility behavior for the forensic workspace.
+- [x] Inspect generated JSON and CSV exports for required audit content.
+- [x] Expand automated coverage for permitted-copy, tamper/reset, and export workflow helpers.
+- [x] Manually verify keyboard-only navigation and visible focus states across primary forensic controls.
+- [x] Verify reduced-motion behavior suppresses non-essential motion without affecting workflow controls.
+- [x] Complete comprehensive keyboard traversal validation across case, evidence, verification, tamper, benchmark, and report controls.
+- [x] Execute behavioral reduced-motion validation while confirming core workflows remain usable.
+- [x] Validate the production build after final accessibility, export, and documentation updates.
+- [x] Verify keyboard focus and activation for concrete in-panel controls in Evidence, Verification, Tamper, Benchmark, and Report views.
+- [x] Add behavioral test coverage that simulates a reduced-motion preference and verifies rendered motion-profile updates while workflows remain available.
+- [x] Perform keyboard-only browser validation of actual in-panel Evidence, Verification, Tamper, Benchmark, and Report actions.
+- [x] Add a rendered reduced-motion test that observes the workspace data attribute and confirms interaction controls remain available.
+- [x] Keyboard-activate an actual in-panel Evidence workflow control and record the result.
+- [x] Keyboard-activate the in-panel ECDSA baseline benchmark control and record the result.
+- [x] Save a final project checkpoint after verifying every completed item.
+- [x] Package a clean local-only ZIP archive of the project, excluding generated dependencies and runtime logs.
+- [x] Support permitted image attachments in the Evidence Vault with MIME and size validation before registration.
+- [x] Persist permitted image bytes through object storage while retaining hashes, immutable reference, and image metadata in the evidence manifest.
+- [x] Show a safe local image preview and persistent stored-image preview for image evidence without changing original bytes.
+- [x] Add test coverage for supported image registration, image rejection, manifest preservation, and image preview behavior.
+- [x] Verify desktop, mobile, keyboard, and independent integrity verification flows for image evidence.
+- [x] Provide safe local-only configuration guidance for database, storage, and OAuth services without including secrets.
+- [x] Add rendered UI coverage for local and stored permitted-image previews in the Evidence Vault.
+- [x] Record that the post-fix browser file-chooser walkthrough remains a manual follow-up; completed validation combines rendered desktop/mobile preview coverage, live tRPC image registration and verification, and fresh cross-viewport review.
+- [x] Update the readiness record with the exact automated validation evidence and the pending browser-walkthrough limitation.
+- [x] Keep the permitted image/file input mounted across workspace panels so Evidence Vault registration controls can open it.
+- [x] Fix server-side verification failure caused by Node.js fetch() receiving relative URLs (/manus-storage/...) instead of absolute URLs.
+- [x] Add resolveStorageReadUrl() helper that resolves relative storage paths against the incoming request origin.
+- [x] Extract appOrigin from Express request headers (host, protocol, x-forwarded-*) into the tRPC context.
+- [x] Thread appOrigin through verifyEvidence() and tamper procedures so all server-side fetch() calls use absolute URLs.
+- [x] Add Vitest coverage for URL resolution (absolute passthrough, relative resolution, localhost fallback), verification pass/fail, artifact-copy tamper, ledger-copy tamper, and permitted-image safeguards.
+- [x] Verify pnpm test (35 tests pass), pnpm check (clean), and pnpm build (succeeds).
+- [x] Manual localhost acceptance testing: verification PASS, artifact-copy FAIL, ledger-copy FAIL, reset, benchmark, acquire, dashboard, audit export all pass.
+- [x] Update docs/LOCAL_SETUP.md with corrected localhost storage behavior and resolveStorageReadUrl() documentation.
+- [x] Section 1: Add storage-URL hardening integration tests (6 tests for different ports, origins, absolute passthrough, and fallback).
+- [x] Section 2: Add JPEG and WebP image registration tests with magic-byte validation and rejection tests.
+- [x] Section 3: Add verification failure test (hash mismatch returns fail status) and NOT_FOUND test.
+- [x] Section 4: Add tamper-reset-after-artifact-copy test and NOT_FOUND tamper test.
+- [x] Section 5: Verify ML-DSA-65 (FIPS 204) string appears consistently in exports and test assertions.
+- [x] Section 6: Add export edge-case tests for null case, empty custody events, and verification absence.
+- [x] Section 7: Interactive control tests expanded with dashboard, verification failure, and tamper-reset scenarios.
+- [x] Section 8: Regression tests expanded from 35 to 58 tests covering storage resolution, image types, verification, tamper, exports, and dashboard.
+- [x] Section 9: Updated LOCAL_SETUP.md with port configuration, environment variables, troubleshooting, and explicit configuration guidance.
+- [x] Section 10: Accessibility verified via existing tests (focus-visible, reduced-motion, ARIA labels, keyboard navigation).
+- [x] Section 11: Final validation — 58 tests pass, pnpm check clean, pnpm build succeeds.
+- [x] Section 12: Unified ML-DSA disclosure text to a single constant (`MLDSA_DISCLOSURE_TEXT`) used identically in forensicCore.ts, forensics.ts, Home.tsx, and all exports. No conditional wording based on runtime status.
+- [x] Section 13: Added role-based server-side permission middleware (Investigator, Examiner, Reviewer) with `createRoleGuard()`, `isRoleAllowed()`, and role-guarded tRPC procedures. Investigator can acquire/create/handover; Examiner can verify/benchmark/export; Reviewer can tamper/reset/dashboard.
+- [x] Section 14: Enhanced ECDSA benchmark with research-quality metadata: median, standard deviation, key sizes (public/private), storage overhead, tamper detection rate, Node version, OS, record count, and repetitions.
+- [x] Section 15: Enhanced audit export with verification breakdown (artifact, signatures, continuity, event hashes), report checksum (SHA-256), ML-DSA disclosure text in JSON/CSV/Markdown, and enhanced benchmark fields.
+- [x] Section 16: Added `mldsaDisclosure` field to server audit export for consistent ML-DSA wording across all export formats.
+- [x] Section 17: Expanded test suite from 58 to 81 tests covering ML-DSA disclosure consistency, role-based permission enforcement, enhanced benchmark metadata, enhanced audit export structure, verification breakdown in Markdown, and enhanced benchmark in CSV/Markdown exports.
+- [x] Section 18: Verified pnpm test (81 tests pass), pnpm check (clean), and pnpm build (succeeds) after all changes.
