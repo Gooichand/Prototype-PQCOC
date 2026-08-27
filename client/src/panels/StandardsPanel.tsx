@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { AlertTriangle, Beaker, FileKey2, Fingerprint, LockKeyhole, Network, ShieldCheck } from "lucide-react";
@@ -5,6 +6,9 @@ import { AlertTriangle, Beaker, FileKey2, Fingerprint, LockKeyhole, Network, Shi
 const MLDSA_DISCLOSURE = "ML-DSA runtime capability detected; no execution adapter is provisioned. No ML-DSA benchmark is performed.";
 
 export default function StandardsPanel({ onResetDemo, resetPending }: { onResetDemo: () => void; resetPending: boolean }) {
+  const capability = trpc.forensic.capability.useQuery();
+  const mlDsaDisclosure = capability.data?.detail ?? MLDSA_DISCLOSURE;
+
   return (
     <section className="stacked-layout">
       <section className="sketch-card">
@@ -15,7 +19,7 @@ export default function StandardsPanel({ onResetDemo, resetPending }: { onResetD
           <article><LockKeyhole /><h3>Digital signature</h3><p>ECDSA-P256 signs canonical custody records and verifies signer association against stored public keys.</p></article>
           <article><Network /><h3>Append-only continuity</h3><p>Prior-event hashes create a tamper-evident chronology. A ledger alone does not establish admissibility.</p></article>
           <article><ShieldCheck /><h3>Confidentiality</h3><p>Evidence content is held by object-storage reference. Encryption and access controls require separate operational controls.</p></article>
-          <article><FileKey2 /><h3>Post-quantum posture</h3><p>{MLDSA_DISCLOSURE}</p></article>
+          <article><FileKey2 /><h3>Post-quantum posture</h3><p>{mlDsaDisclosure}</p></article>
           <article><Beaker /><h3>Research limitation</h3><p>This is a demonstration system with synthetic data and permitted copies, not a certified forensic platform.</p></article>
         </div>
       </section>

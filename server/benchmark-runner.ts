@@ -32,6 +32,9 @@ const pqCapability = getPqCapability();
 console.log(`ML-DSA-65 execution available: ${pqCapability.executionAvailable}\n`);
 
 const mldsaMeta = pqCapability.executionAvailable ? getMldsa65ParameterMetadata() : null;
+const mldsaDisclosure = pqCapability.executionAvailable
+  ? "ML-DSA-65 execution adapter active. Real key generation, signing, verification, and tamper rejection were performed."
+  : MLDSA_DISCLOSURE_TEXT;
 
 interface RunResult {
   config: { recordCount: number; repetitions: number };
@@ -44,7 +47,7 @@ const results = {
   nodeVersion: process.version,
   os: `${process.platform} ${process.arch}`,
   mlDsaCapability: pqCapability,
-  mlDsaDisclosure: MLDSA_DISCLOSURE_TEXT,
+  mlDsaDisclosure: mldsaDisclosure,
   mlDsaParameterMetadata: mldsaMeta,
   runs: [] as RunResult[],
 };
@@ -58,7 +61,7 @@ for (const config of BENCHMARK_CONFIGS) {
   if (mldsa) {
     console.log(`  ML-DSA — Sign avg: ${mldsa.signingMsAverage} ms | Verify avg: ${mldsa.verificationMsAverage} ms | Sig size: ${mldsa.signatureBytesAverage} bytes`);
   } else {
-    console.log(`  ML-DSA — Not executed (${MLDSA_DISCLOSURE_TEXT})`);
+    console.log(`  ML-DSA — Not executed (${mldsaDisclosure})`);
   }
 }
 

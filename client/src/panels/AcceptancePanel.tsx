@@ -26,6 +26,9 @@ export default function AcceptancePanel() {
   const [results, setResults] = useState<Array<{ step: string; status: "pass" | "fail" | "pending"; detail: string; timestamp?: number }>>([]);
   const [running, setRunning] = useState(false);
   const utils = trpc.useUtils();
+  const capability = trpc.forensic.capability.useQuery();
+  const mlDsaDisclosure = capability.data?.detail ?? MLDSA_DISCLOSURE;
+  const benchmarkStep = capability.data?.executionAvailable ? "Run ECDSA + ML-DSA benchmark" : "Run ECDSA benchmark";
 
   const statusText = running ? "running" : results.length > 0 ? `${results.filter((r) => r.status === "pass").length}/${results.length} pass` : "not run";
 
@@ -78,21 +81,21 @@ export default function AcceptancePanel() {
       add("15. Reset tamper state", "pending", "Resetting…");
       await utils.client.forensic.resetTamper.mutate({ evidenceId: evi?.id ?? "" });
       add("15. Reset tamper state", "pass", "Tamper state reset to verified");
-      add("16. Run ECDSA benchmark", "pending", "Benchmarking…");
+      add(`16. ${benchmarkStep}`, "pending", "Benchmarking…");
       const bench = await utils.client.forensic.runBenchmark.mutate({ recordCount: 50, repetitions: 3 });
-      add("16. Run ECDSA benchmark", "pass", `Sign avg: ${bench.results?.ecdsa?.signingMsAverage ?? "N/A"} ms`);
+      add(`16. ${benchmarkStep}`, "pass", `Sign avg: ${bench.results?.ecdsa?.signingMsAverage ?? "N/A"} ms`);
       add("17. Generate Markdown report", "pending", "Generating…");
       const mdExport = await utils.client.forensic.auditExport.query({ evidenceId: evi?.id ?? "" });
       add("17. Generate Markdown report", "pass", `Checksum: ${mdExport?.reportChecksum?.slice(0, 16) ?? "N/A"}…`);
       add("18. Generate JSON report", "pass", "Export includes manifest, events, verification, algorithms, benchmark");
       add("19. Generate CSV report", "pass", "Ledger export with all custody events");
-      add("20. ML-DSA disclosure check", "pass", MLDSA_DISCLOSURE);
+      add("20. ML-DSA disclosure check", "pass", mlDsaDisclosure);
     } catch (error) {
       const msg = error instanceof Error ? error.message : "Unknown error";
       setResults((prev) => [...prev, { step: "Error", status: "fail", detail: msg, timestamp: Date.now() }]);
     }
     setRunning(false);
-  }, [utils]);
+  }, [benchmarkStep, mlDsaDisclosure, utils]);
 
   return (
     <section className="stacked-layout">

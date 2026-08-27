@@ -90,7 +90,10 @@ describe("Regression: bundle splitting", () => {
     const navButtons = Array.from(container.querySelectorAll(".nav-item"));
 
     for (const btn of navButtons) {
-      await act(async () => { (btn as HTMLButtonElement).click(); });
+      await act(async () => {
+        (btn as HTMLButtonElement).click();
+        await new Promise((resolve) => setTimeout(resolve, 50));
+      });
       // Should not throw — the panel rendered without crashing
     }
   });

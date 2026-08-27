@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { CheckCircle2, ClipboardCheck, FileKey2, FileText, Gauge, LockKeyhole, ShieldAlert } from "lucide-react";
@@ -34,6 +35,10 @@ export default function BenchmarkPanel() {
   const runBenchmark = trpc.forensic.runBenchmark.useMutation();
   const capability = trpc.forensic.capability.useQuery();
   const pq = capability.data;
+  const mlDsaDisclosure = pq?.executionAvailable
+    ? pq.detail
+    : pq?.detail ?? MLDSA_DISCLOSURE;
+  const benchmarkLabel = pq?.executionAvailable ? "Run ECDSA + ML-DSA benchmark" : "Run ECDSA benchmark";
 
   const latestBenchmark = benchmarks.data?.[0] ? { ...benchmarks.data[0], results: JSON.parse(benchmarks.data[0].resultsJson) } : null;
 
@@ -46,7 +51,7 @@ export default function BenchmarkPanel() {
           <p>The benchmark measures real ECDSA-P256 signing and verification timings plus signature size. ML-DSA is presented only when the native server capability probe passes; unavailable capability is a result, not a substituted number.</p>
         </div>
         <Button className="crimson-button" disabled={runBenchmark.isPending} onClick={() => runBenchmark.mutate({ recordCount: 50, repetitions: 3 })}>
-          <Gauge size={18} />{runBenchmark.isPending ? "Running benchmark…" : "Run ECDSA benchmark"}
+          <Gauge size={18} />{runBenchmark.isPending ? "Running benchmark…" : benchmarkLabel}
         </Button>
       </section>
       {latestBenchmark && (
@@ -65,7 +70,7 @@ export default function BenchmarkPanel() {
               <MetricCard label="Signature bytes" value={`${latestBenchmark.results.ecdsa.signatureBytesAverage} B`} note="ECDSA-P256 DER representation" icon={FileText} tone="amber" />
             </div>
           )}
-          <div className="pqc-disclosure"><FileKey2 size={20} /><span><b>ML-DSA result:</b> {MLDSA_DISCLOSURE}</span></div>
+          <div className="pqc-disclosure"><FileKey2 size={20} /><span><b>ML-DSA result:</b> {mlDsaDisclosure}</span></div>
         </section>
       )}
       <section className="sketch-card">
