@@ -92,4 +92,5 @@
 - [x] Section 37: Added 8 regression tests in Home.regression.test.tsx covering: analytics removal (no VITE_ placeholders, no analytics scripts), bundle splitting (overview renders, all nav items present, all panels navigate without errors), core functionality preserved (PQ status, evidence vault, ML-DSA disclosure). All 111 tests pass across 12 files.
 - [x] Finalize the exact GitHub revision as the research-paper prototype release: run end-to-end workflow, rerun benchmarks and plots, clean warnings/debug output, verify frozen setup, update validation documentation, and create a release tag only after all gates pass.
 - [x] Refresh README.md, ARCHITECTURE.md, and EXPERIMENTS.md, and reconcile DOCS.md, CHECKLIST.md, DELIVERY.md, and final validation claims with the finalized code and results.
-- [ ] Inspect and refine README.md against the finalized source, package scripts, benchmark artifacts, release tags, and research limitations.
+- [x] Inspect and refine README.md against the finalized source, package scripts, benchmark artifacts, release tags, and research limitations.
+- [x] Produce a citation-grounded research paper around PQ-ForensicVault with R1–R10 mapping, architecture, implementation, evaluation, discussion, conclusion, visuals, and reproducibility appendix.
