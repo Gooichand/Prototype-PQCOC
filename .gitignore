@@ -47,10 +47,6 @@ pids
 *.bak
 vite.config.ts.bak
 
-# Generated benchmark artifacts
-benchmark-results.json
-BENCHMARK_RESULTS.md
-
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
