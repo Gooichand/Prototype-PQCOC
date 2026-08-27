@@ -71,3 +71,9 @@
 - [x] Section 16: Added `mldsaDisclosure` field to server audit export for consistent ML-DSA wording across all export formats.
 - [x] Section 17: Expanded test suite from 58 to 81 tests covering ML-DSA disclosure consistency, role-based permission enforcement, enhanced benchmark metadata, enhanced audit export structure, verification breakdown in Markdown, and enhanced benchmark in CSV/Markdown exports.
 - [x] Section 18: Verified pnpm test (81 tests pass), pnpm check (clean), and pnpm build (succeeds) after all changes.
+- [x] Section 19: Wrote end-to-end integration test (server/workflow.e2e.test.ts) covering the full forensic chain: acquisition → SHA-256/SHA3-256 hashing → ECDSA-P256 signing → custody chain logging → artifact + chain verification → ML-DSA capability probe → benchmark measurement → audit report generation → tamper detection.
+- [x] Section 20: Ran ECDSA-P256 benchmark suite (10-200 records, 2-3 reps) and saved results to benchmark-results.json and BENCHMARK_RESULTS.md.
+- [x] Section 21: Cleaned debug console.log from ComponentShowcase.tsx.
+- [x] Section 22: Verified one-command setup (pnpm install --frozen-lockfile succeeds, pnpm dev, pnpm test, pnpm check, pnpm build all pass).
+- [x] Section 23: Froze dependencies in pnpm-lock.yaml, initialized git repo, committed all source, tagged release v1.0.0.
+- [x] Section 24: Final validation — 85 tests pass across 10 files, TypeScript check clean, production build succeeds, git tag v1.0.0 created.
